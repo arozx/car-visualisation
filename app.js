@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  // Fetch the initial position of the object from the server
+  // Function to fetch the position of the object from the server
   const fetchPosition = async () => {
     const response = await fetch("/get_position");
     return await response.json();
@@ -142,8 +142,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   colorInput.addEventListener("input", (event) => {
     const colorValue = event.target.value;
     body.material.color.set(colorValue);
-    localStorage.setItem("carColor", colorValue); // Save the selected color
+    localStorage.setItem("carColor", colorValue); // Save the color in local storage
   });
+
+  // Function to call fetchPosition every 100ms
+  const fetchPositionInterval = setInterval(moveCar, 100);
 
   // Animation loop
   function animate() {
