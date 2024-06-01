@@ -1,0 +1,75 @@
+body { margin: 0; }
+canvas { display: block; }
+#coordinate-tag {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.5); /* Transparent background */
+    padding: 5px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: -180px;
+    width: 180px;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9); /* Transparent background */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for visual effect */
+    z-index: 1;
+    transition: left 0.3s ease;
+}
+#sidebar.expand {
+    left: 0;
+}
+#sidebar-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#toggle-sidebar {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff; /* Button background color */
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+#toggle-sidebar:hover {
+    background-color: #f0f0f0; /* Button hover background color */
+}
+#toggle-grid {
+    padding: 10px;
+    background-color: #fff; /* Button background color */
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+.sidebar-icon {
+    font-size: 20px;
+    margin-bottom: 10px;
+    margin-left: auto; /* Align icons to the right */
+    display: block;
+}
+.sidebar-icon.expand {
+    margin-left: auto;
+    display: block;
+}
+.color-input {
+    margin-top: 10px;
+    width: 80%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Car Visualization</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <div id="coordinate-tag">X: 0, Y: 0, Z: 0</div>
+    <div id="sidebar" class="expand">
+        <div id="sidebar-content">
+            <button id="toggle-sidebar"><i class="fas fa-chevron-right"></i></button>
+            <button id="toggle-grid"><i class="fas fa-th"></i> Grid</button>
+            <input type="color" id="car-color" class="color-input" value="#ff0000">
+        </div>
+    </div>
+    <!-- Include Three.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+
+    <!-- Include your bundled JavaScript -->
+    <script src="static/js/bundle.js"></script>
+</body>
+</html>

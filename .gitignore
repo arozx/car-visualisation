@@ -1,0 +1,12 @@
+# python
+bin/
+include/
+lib/
+lib64
+
+pyvenv.cfg
+
+# node
+node_modules/
+package-lock.json
+dist/
