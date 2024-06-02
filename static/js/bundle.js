@@ -1,17 +1,6 @@
 /******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
 document.addEventListener("DOMContentLoaded", async () => {
-  // Function to set the initial sidebar state
-  const setInitialSidebarState = () => {
-    const isExpanded = localStorage.getItem("sidebarExpanded");
-    if (isExpanded === "true") {
-      sidebar.classList.add("expand");
-      toggleSidebarButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-      toggleGridButton.style.width = "100%";
-      toggleGridButton.innerHTML = '<i class="fas fa-th"></i>';
-    }
-  };
-
   // Function to set the initial color
   const setInitialColor = () => {
     const savedColor = localStorage.getItem("carColor");
@@ -105,48 +94,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Get the coordinate tag element
   const coordinateTag = document.getElementById("coordinate-tag");
 
-  // Get the sidebar and toggle sidebar button
-  const sidebar = document.getElementById("sidebar");
-  const toggleSidebarButton = document.getElementById("toggle-sidebar");
-
-  // Function to toggle the sidebar
-  const toggleSidebar = () => {
-    sidebar.classList.toggle("expand");
-    const isExpanded = sidebar.classList.contains("expand");
-    localStorage.setItem("sidebarExpanded", isExpanded);
-    if (isExpanded) {
-      toggleSidebarButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
-      toggleGridButton.style.width = "100%";
-      toggleGridButton.innerHTML = '<i class="fas fa-th"></i>';
-    } else {
-      toggleSidebarButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
-      toggleGridButton.style.width = "30px";
-      toggleGridButton.innerHTML = '<i class="fas fa-th"></i>';
-    }
-  };
-
-  // Event listener for the toggle sidebar button
-  toggleSidebarButton.addEventListener("click", toggleSidebar);
-
-  // Get the toggle grid button
-  const toggleGridButton = document.getElementById("toggle-grid");
-
-  // Function to toggle the grid visibility
-  const toggleGrid = () => {
-    gridHelper.visible = !gridHelper.visible;
-  };
-
-  // Event listener for the toggle grid button
-  toggleGridButton.addEventListener("click", toggleGrid);
-
-  // Event listener for color input change
-  const colorInput = document.getElementById("car-color");
-  colorInput.addEventListener("input", (event) => {
-    const colorValue = event.target.value;
-    body.material.color.set(colorValue);
-    localStorage.setItem("carColor", colorValue); // Save the color in local storage
-  });
-
   // Function to call fetchPosition every 100ms
   const fetchPositionInterval = setInterval(moveCar, 100);
 
@@ -166,16 +113,35 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Move the car initially
   moveCar();
 
-  // Listen for changes in position
+  // Function to toggle the grid visibility
+  const toggleGrid = () => {
+    gridHelper.visible = !gridHelper.visible;
+  };
+
+  // Get the toggle grid button
+  const toggleGridButton = document.getElementById("toggle-grid-button");
+
+  // Event listener for the toggle grid button
+  toggleGridButton.addEventListener("click", toggleGrid);
+
+  // Function to toggle the display of coordinates
+  const toggleCoordinates = () => {
+    const coordinateTag = document.getElementById("coordinate-tag");
+    coordinateTag.style.display =
+      coordinateTag.style.display === "none" ? "block" : "none";
+  };
+
+  // Event listener for the toggle coordinates button
+  const toggleCoordinatesButton = document.getElementById(
+    "toggle-coordinates-button"
+  );
+  toggleCoordinatesButton.addEventListener("click", toggleCoordinates);
+
+  // Connect to Socket.IO
   const socket = io();
   socket.on("position_changed", () => {
     moveCar();
   });
-
-  // Call the function to set the initial sidebar state when the page is loaded
-  setInitialSidebarState();
-  // Call the function to set the initial color when the page is loaded
-  setInitialColor();
 });
 
 /******/ })()

@@ -8,18 +8,29 @@
     <link rel="stylesheet" href="../static/styles.css">
 </head>
 <body>
-    <div id="coordinate-tag">X: 0, Y: 0, Z: 0</div>
-    <div id="sidebar" class="expand">
+    <div id="coordinate-tag" style="display: none;">X: 0, Y: 0, Z: 0</div>
+    <div id="sidebar" class="collapsed">
+        <div id="sidebar-header">
+            <i class="fas fa-cube"></i>
+            <span class="sidebar-title">The App</span>
+        </div>
         <div id="sidebar-content">
-            <button id="toggle-sidebar"><i class="fas fa-chevron-right"></i></button>
-            <button id="toggle-grid"><i class="fas fa-th"></i> Grid</button>
-            <input type="color" id="car-color" class="color-input" value="#ff0000">
+            <ul>
+                <li id="toggle-grid-button"><i class="fas fa-th"></i> <span class="sidebar-text">Toggle Grid</span></li>
+                <li id="toggle-coordinates-button"><i class="fas fa-location-arrow"></i> <span class="sidebar-text">Toggle Coordinates</span></li>
+            </ul>
+        </div>
+        <div id="sidebar-footer">
+            <i class="fas fa-user-circle"></i>
+            <span class="sidebar-text">Account</span>
         </div>
     </div>
     <!-- Include Three.js library -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-
+    <!-- Include Socket.IO library -->
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js" defer></script>
     <!-- Include your bundled JavaScript -->
-    <script src="static/js/bundle.js"></script>
+    <script src="static/js/bundle.js" defer></script>
 </body>
 </html>
+
