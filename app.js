@@ -157,6 +157,47 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
+  // Function to handle camera zoom and rotation
+  const handleCameraZoomAndRotation = () => {
+    const zoomInput = document.getElementById("camera-zoom");
+    const rotationInput = document.getElementById("camera-rotation");
+
+    const updateCamera = () => {
+      const zoomValue = parseFloat(zoomInput.value);
+      const rotationValue = parseFloat(rotationInput.value);
+
+      // Calculate camera position based on zoom
+      const radius = zoomValue;
+      const theta = rotationValue * (Math.PI / 180); // Convert degrees to radians
+      const x = radius * Math.sin(theta);
+      const z = radius * Math.cos(theta);
+
+      // Update camera position
+      camera.position.set(x, camera.position.y, z);
+      camera.lookAt(0, 0, 0); // Keep camera looking at the center
+
+      // Save zoom and rotation values to localStorage
+      localStorage.setItem("cameraZoom", zoomValue);
+      localStorage.setItem("cameraRotation", rotationValue);
+    };
+
+    // Add event listeners for zoom and rotation inputs
+    zoomInput.addEventListener("input", updateCamera);
+    rotationInput.addEventListener("input", updateCamera);
+
+    // Retrieve zoom and rotation values from localStorage and update inputs
+    const savedZoom = localStorage.getItem("cameraZoom");
+    const savedRotation = localStorage.getItem("cameraRotation");
+    if (savedZoom !== null && savedRotation !== null) {
+      zoomInput.value = savedZoom;
+      rotationInput.value = savedRotation;
+      updateCamera(); // Update camera position with saved values
+    }
+  };
+
+  // Call the function to handle camera zoom and rotation
+  handleCameraZoomAndRotation();
+
   // Function to reload the page on screen resize
   const reloadOnResize = () => {
     window.addEventListener("resize", () => {
