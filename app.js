@@ -114,6 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Function to toggle the grid visibility
   const toggleGrid = () => {
     gridHelper.visible = !gridHelper.visible;
+    localStorage.setItem("gridVisible", gridHelper.visible);
   };
 
   // Get the toggle grid button
@@ -124,9 +125,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Function to toggle the display of coordinates
   const toggleCoordinates = () => {
-    const coordinateTag = document.getElementById("coordinate-tag");
-    coordinateTag.style.display =
-      coordinateTag.style.display === "none" ? "block" : "none";
+    if (coordinateTag.style.display === "none") {
+      coordinateTag.style.display = "block";
+      localStorage.setItem("coordinatesVisible", "true");
+    } else {
+      coordinateTag.style.display = "none";
+      localStorage.setItem("coordinatesVisible", "false");
+    }
   };
 
   // Event listener for the toggle coordinates button
@@ -135,9 +140,37 @@ document.addEventListener("DOMContentLoaded", async () => {
   );
   toggleCoordinatesButton.addEventListener("click", toggleCoordinates);
 
+  // Function to set the initial state of the grid and coordinates
+  const setInitialState = () => {
+    const gridVisible = localStorage.getItem("gridVisible");
+    if (gridVisible === "true") {
+      gridHelper.visible = true;
+    } else {
+      gridHelper.visible = false;
+    }
+
+    const coordinatesVisible = localStorage.getItem("coordinatesVisible");
+    if (coordinatesVisible === "true") {
+      coordinateTag.style.display = "block";
+    } else {
+      coordinateTag.style.display = "none";
+    }
+  };
+
+  // Function to reload the page on screen resize
+  const reloadOnResize = () => {
+    window.addEventListener("resize", () => {
+      location.reload();
+    });
+  };
+
+  // Call the reloadOnResize function
+  reloadOnResize();
+
   // Connect to Socket.IO
   const socket = io();
   socket.on("position_changed", () => {
     moveCar();
   });
+  setInitialState();
 });
