@@ -214,4 +214,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     moveCar();
   });
   setInitialState();
+
+  // Function to toggle the sidebar visibility
+  const toggleSidebar = () => {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("expanded");
+  };
+
+  // Get the toggle sidebar button
+  const toggleSidebarButton = document.getElementById("toggle-sidebar-button");
+
+  // Event listener for the toggle sidebar button
+  toggleSidebarButton.addEventListener("click", toggleSidebar);
+
+  // Function to toggle the display of camera controls
+  const toggleCameraControls = () => {
+    const cameraControls = document.getElementById("camera-controls");
+    cameraControls.style.display =
+      cameraControls.style.display === "none" ? "block" : "none";
+  };
+
+  // Get the toggle camera controls button
+  const toggleCameraControlsButton = document.getElementById(
+    "toggle-camera-controls-button"
+  );
+
+  // Event listener for the toggle camera controls button
+  toggleCameraControlsButton.addEventListener("click", toggleCameraControls);
 });

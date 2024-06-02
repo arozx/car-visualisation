@@ -1,5 +1,11 @@
-body { margin: 0; }
-canvas { display: block; }
+body {
+    margin: 0;
+}
+
+canvas {
+    display: block;
+}
+
 #coordinate-tag {
     position: absolute;
     top: 10px;
@@ -22,12 +28,13 @@ canvas { display: block; }
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: width 0.3s ease;
+    transition: width 0.3s ease, left 0.3s ease; /* Updated transition */
     z-index: 1;
 }
 
 #sidebar.expanded {
-    width: 200px; /* Expanded width */
+    width: 240px; /* Expanded width */
+    left: 0; /* Adjusted position */
 }
 
 #sidebar-header {
@@ -67,14 +74,11 @@ canvas { display: block; }
     padding: 15px 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 100%;
 }
 
 #sidebar-content ul li:hover {
     background-color: #343434;
-}
-
-#sidebar-content ul li i {
-    font-size: 20px;
 }
 
 .sidebar-text {
@@ -106,10 +110,6 @@ canvas { display: block; }
     font-size: 24px;
 }
 
-#sidebar.expanded #sidebar-footer .sidebar-text {
-    display: inline;
-}
-
 #main-content {
     margin-left: 60px; /* Adjust according to sidebar width */
     padding: 20px;
@@ -117,5 +117,29 @@ canvas { display: block; }
 }
 
 #sidebar.expanded ~ #main-content {
-    margin-left: 200px; /* Adjust according to expanded sidebar width */
+    margin-left: 240px; /* Adjust according to expanded sidebar width */
+}
+
+#sidebar-content ul li input[type="range"] {
+    width: calc(100% - 20px); /* Adjust as needed */
+    margin-top: 5px; /* Add spacing between controls */
+}
+
+#camera-controls {
+    display: none; /* Hide camera controls by default */
+    padding: 10px; /* Add padding for spacing */
+}
+
+#camera-controls label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+#camera-controls input[type="range"] {
+    width: calc(100% -20px) !important;
+}
+
+#sidebar.expanded #camera-controls {
+    display: block; /* Show camera controls when sidebar is expanded */
 }

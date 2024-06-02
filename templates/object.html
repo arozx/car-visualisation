@@ -11,22 +11,27 @@
     <div id="coordinate-tag" style="display: none;">X: 0, Y: 0, Z: 0</div>
     <div id="sidebar" class="collapsed">
         <div id="sidebar-header">
-            <i class="fas fa-cube"></i>
+            <button id="toggle-sidebar-button"><i class="fas fa-bars"></i></button>
             <span class="sidebar-title">The App</span>
         </div>
         <div id="sidebar-content">
             <ul>
                 <li id="toggle-grid-button"><i class="fas fa-th"></i> <span class="sidebar-text">Toggle Grid</span></li>
                 <li id="toggle-coordinates-button"><i class="fas fa-location-arrow"></i> <span class="sidebar-text">Toggle Coordinates</span></li>
-                <li>
-                    <label for="camera-zoom">Camera Zoom:</label>
-                    <input type="range" id="camera-zoom" min="5" max="100" value="10" step="1">
-                </li>
-                <li>
-                    <label for="camera-rotation">Camera Rotation:</label>
-                    <input type="range" id="camera-rotation" min="0" max="360" value="0" step="1">
-                </li>
             </ul>
+            <!-- New div to contain camera controls -->
+            <div id="camera-controls">
+                <ul>
+                    <li>
+                        <label for="camera-zoom">Camera Zoom:</label>
+                        <input type="range" id="camera-zoom" min="5" max="100" value="10" step="1">
+                    </li>
+                    <li>
+                        <label for="camera-rotation">Camera Rotation:</label>
+                        <input type="range" id="camera-rotation" min="0" max="360" value="0" step="1">
+                    </li>
+                </ul>
+            </div>
         </div>
         <div id="sidebar-footer">
             <i class="fas fa-user-circle"></i>
@@ -41,4 +46,3 @@
     <script src="static/js/bundle.js" defer></script>
 </body>
 </html>
-
