@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    overflow: hidden; /* Prevent scrolling when the sidebar is open */
 }
 
 canvas {
@@ -15,26 +16,26 @@ canvas {
     border-radius: 5px;
     font-family: Arial, sans-serif;
     font-size: 14px;
+    z-index: 2;
 }
 
 #sidebar {
     position: fixed;
     top: 0;
     left: 0;
-    width: 60px; /* Initial collapsed width */
+    width: 60px;
     height: 100%;
     background-color: #232323;
     color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: width 0.3s ease, left 0.3s ease; /* Updated transition */
+    transition: width 0.3s ease; /* Simplified transition for smoothness */
     z-index: 1;
 }
 
 #sidebar.expanded {
-    width: 240px; /* Expanded width */
-    left: 0; /* Adjusted position */
+    width: 240px;
 }
 
 #sidebar-header {
@@ -111,23 +112,23 @@ canvas {
 }
 
 #main-content {
-    margin-left: 60px; /* Adjust according to sidebar width */
+    margin-left: 60px;
     padding: 20px;
     transition: margin-left 0.3s ease;
 }
 
 #sidebar.expanded ~ #main-content {
-    margin-left: 240px; /* Adjust according to expanded sidebar width */
+    margin-left: 240px;
 }
 
 #sidebar-content ul li input[type="range"] {
-    width: calc(100% - 20px); /* Adjust as needed */
-    margin-top: 5px; /* Add spacing between controls */
+    width: calc(100% - 20px);
+    margin-top: 5px;
 }
 
 #camera-controls {
-    display: none; /* Hide camera controls by default */
-    padding: 10px; /* Add padding for spacing */
+    display: none;
+    padding: 10px;
 }
 
 #camera-controls label {
@@ -141,5 +142,5 @@ canvas {
 }
 
 #sidebar.expanded #camera-controls {
-    display: block; /* Show camera controls when sidebar is expanded */
+    display: block;
 }

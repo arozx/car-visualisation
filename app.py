@@ -1,16 +1,8 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_socketio import SocketIO
 
-app = Flask(__name__, static_url_path="/static")
-
-# Initial position of the object
-object_position = {"x": 0, "y": 0, "z": 0}
-
-
-# Serve static files (JavaScript)
-@app.route("/static/js/<path:path>")
-def static_js(path):
-    return app.send_static_file(f"js/{path}")
+app = Flask(__name__, static_folder="frontend/public")
+socketio = SocketIO(app)
 
 
 # Ignore favicon request
@@ -19,12 +11,10 @@ def favicon():
     return ""
 
 
-socketio = SocketIO(app)
-
-# Initial position of the object
 object_position = {"x": 0, "y": 0, "z": 0}
 
 
+# API endpoint to move the object
 @app.route("/move_object", methods=["POST"])
 def move_object():
     global object_position
@@ -36,14 +26,21 @@ def move_object():
     return jsonify(object_position)
 
 
-@app.route("/object")
-def object():
-    return render_template("object.html")
-
-
 @app.route("/get_position", methods=["GET"])
 def get_position():
     return jsonify(object_position)
+
+
+# Serve the index.html file from the frontend public directory
+@app.route("/")
+def index():
+    return send_from_directory("frontend/public", "index.html")
+
+
+# Serve static files from the frontend directory
+@app.route("/<path:filename>")
+def serve_static(filename):
+    return send_from_directory("frontend/public", filename)
 
 
 if __name__ == "__main__":

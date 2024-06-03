@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Car Visualization</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
     <div id="coordinate-tag" style="display: none;">X: 0, Y: 0, Z: 0</div>
@@ -19,7 +20,6 @@
                 <li id="toggle-grid-button"><i class="fas fa-th"></i> <span class="sidebar-text">Toggle Grid</span></li>
                 <li id="toggle-coordinates-button"><i class="fas fa-location-arrow"></i> <span class="sidebar-text">Toggle Coordinates</span></li>
             </ul>
-            <!-- New div to contain camera controls -->
             <div id="camera-controls">
                 <ul>
                     <li>
@@ -38,11 +38,12 @@
             <span class="sidebar-text">Account</span>
         </div>
     </div>
-    <!-- Include Three.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <div id="app"></div>
     <!-- Include Socket.IO library -->
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js" defer></script>
+    <!-- Include petite-vue from CDN -->
+    <script src="https://unpkg.com/petite-vue" defer init></script>
     <!-- Include your bundled JavaScript -->
-    <script src="static/js/bundle.js" defer></script>
+    <script src="./bundle.js" defer></script>
 </body>
 </html>
