@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as THREE from 'three';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const scene = new THREE.Scene();
@@ -26,6 +28,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const gridHelper = new THREE.GridHelper(1000, 1000);
   gridHelper.visible = true;
   scene.add(gridHelper);
+
+
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+
+
+
+
+
 
   // Use existing coordinate tag
   const coordTag = document.getElementById('coordinate-tag') as HTMLElement;
@@ -78,6 +89,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update coordinates display
     coordTag.textContent = `Coordinates: (${body.position.x.toFixed(2)}, ${body.position.y.toFixed(2)}, ${body.position.z.toFixed(2)})`;
+
+    // update controls
+    controls.update();
   };
   animate();
 
