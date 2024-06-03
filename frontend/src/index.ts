@@ -1,8 +1,6 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import * as THREE from 'three';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const scene = new THREE.Scene();
