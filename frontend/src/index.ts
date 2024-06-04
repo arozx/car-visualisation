@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -137,23 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
           tooltip.style.display = 'none'; // Hide tooltip
       }
   }, false);
-
-  window.addEventListener('click', (event) => {
-    // Normalize mouse position to -1 to 1 range
-    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-    // Update the picking ray with the camera and mouse position
-    raycaster.setFromCamera(mouse, camera);
-
-    // Calculate objects intersecting the picking ray
-    const intersects = raycaster.intersectObjects([body, frontWheel1, frontWheel2]);
-
-    if (intersects.length > 0) {
-        // The mouse clicked on the car
-        console.log('Clicked on the car');
-    }
-}, false);
 
   // Function to get the car's position & move the car
   let previousPosition = { x: 0, y: 0, z: 0 };
