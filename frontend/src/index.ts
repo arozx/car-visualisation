@@ -138,9 +138,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }, false);
 
   // Function to get the car's position & move the car
+  let lastFetchTime = 0;
+  const fetchInterval = 3; // in milliseconds
   let previousPosition = { x: 0, y: 0, z: 0 };
 
   function getCarPosition() {
+    const now = Date.now();
+    if (now - lastFetchTime < fetchInterval) {
+      return; // Skip the function call if it's within the fetch interval
+    }
+    lastFetchTime = now;
+
     fetch('/get_position', {
       method: 'GET',
       headers: {
