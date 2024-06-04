@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { TGALoader } from 'three/examples/jsm/loaders/TGALoader.js';
+import { CubeTexture } from 'three/src/textures/CubeTexture.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   // Create a scene
@@ -93,6 +95,42 @@ document.addEventListener("DOMContentLoaded", () => {
     (error) => console.error(error)
   );
 
+
+  // Load TGA Textures
+  function loadSkybox() {
+      const loader = new TGALoader();
+      
+      const texturePaths: string[] = [
+          '/public/skybox/galaxy+X.tga', '/public/skybox/galaxy-X.tga',
+          '/public/skybox/galaxy+Y.tga', '/public/skybox/galaxy-Y.tga',
+          '/public/skybox/galaxy+Z.tga', '/public/skybox/galaxy-Z.tga'
+      ];
+
+      const materials: THREE.Material[] = [];
+
+      let loaded = 0;
+
+      texturePaths.forEach((texturePath, index) => {
+          loader.load(texturePath, (texture: THREE.Texture) => {
+              // Set the texture format and type
+              texture.format = THREE.RGBAFormat;
+              texture.type = THREE.UnsignedByteType;
+
+              materials[index] = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
+
+              loaded++;
+              console.log('Loaded', loaded);
+              if (loaded === 6) {
+                  const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+                  const skybox = new THREE.Mesh(skyboxGeometry, materials);
+                  scene.add(skybox);
+              }
+          });
+      });
+  }
+  loadSkybox();
+
+
   // Setup lighting
   const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
   scene.add(ambientLight);
@@ -100,6 +138,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const pointLight = new THREE.PointLight(0xffffff, 1, 100); // white light
   pointLight.position.set(0, 10, 0);
   scene.add(pointLight);
+
+  // Add a directional light
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+  directionalLight.position.set(1, 1, 1);
+  scene.add(directionalLight);
+
+  // Add a hemisphere light
+  const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+  scene.add(hemisphereLight);
+
 
   // Create a Raycaster instance
   const raycaster = new THREE.Raycaster();
