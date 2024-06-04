@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
 document.addEventListener("DOMContentLoaded", () => {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
@@ -46,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bodyGeometry = new THREE.BoxGeometry(1, 0.5, 2);
   const bodyMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
   const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-
+  
   const wheelGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.2, 32);
   const wheelMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
@@ -58,27 +60,98 @@ document.addEventListener("DOMContentLoaded", () => {
   const rearWheel1 = new THREE.Mesh(wheelGeometry, wheelMaterial);
   const rearWheel2 = new THREE.Mesh(wheelGeometry, wheelMaterial);
 
-  // Position and rotate the front wheels
+  // Position the front wheels
   frontWheel1.position.set(-0.8, -0.5, 0.3);
   frontWheel2.position.set(0.8, -0.5, 0.3);
 
-  frontWheel1.rotation.z = Math.PI / 2;
-  frontWheel2.rotation.z = Math.PI / 2;
-
-  // Position and rotate the rear wheels
+  // Position the rear wheels
   rearWheel1.position.set(-0.8, -0.5, -0.3); 
   rearWheel2.position.set(0.8, -0.5, -0.3);  
-
-  rearWheel1.rotation.z = Math.PI / 2;
-  rearWheel2.rotation.z = Math.PI / 2;
-
-  scene.add(rearWheel1, rearWheel2);
-  scene.add(body, frontWheel1, frontWheel2);
 
   // Set camera initial position, look at the car
   camera.position.z = 10;
   camera.position.y = 5;
   camera.lookAt(0, 0, 0);
+
+
+// Import car model
+  const loader = new GLTFLoader();
+
+  loader.load(
+    '/public/warthog.glb',
+    (gltf) => {
+      gltf.scene.scale.set(5, 5, 5);
+      gltf.scene.position.y = -0.5;
+      gltf.scene.rotation.y = Math.PI/2;
+      scene.add(rearWheel1, rearWheel2);
+      scene.add(gltf.scene, frontWheel1, frontWheel2);
+    },
+    (xhr) => {
+      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+    },
+    (error) => {
+      console.error('An error happened', error);
+    },
+  );
+
+  const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+  scene.add(ambientLight);
+
+  const pointLight = new THREE.PointLight(0xffffff, 1, 100); // white light
+  pointLight.position.set(0, 10, 0); // position the light
+  scene.add(pointLight);
+
+  // Create a Raycaster instance
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  // Create a tooltip
+  const tooltip = document.createElement('div');
+  tooltip.style.position = 'fixed';
+  tooltip.style.backgroundColor = 'white';
+  tooltip.style.padding = '5px';
+  tooltip.style.border = '1px solid black';
+  tooltip.style.display = 'none'; // Hide it by default
+  document.body.appendChild(tooltip);
+
+  window.addEventListener('mousemove', (event) => {
+      // Normalize mouse position to -1 to 1 range
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      // Update the picking ray with the camera and mouse position
+      raycaster.setFromCamera(mouse, camera);
+
+      // Calculate objects intersecting the picking ray
+      const intersects = raycaster.intersectObjects([body, frontWheel1, frontWheel2]);
+
+      if (intersects.length > 0) {
+          // The mouse is over the car
+          tooltip.style.display = 'block'; // Show the tooltip
+          tooltip.style.left = event.clientX + 'px'; // Position it at the mouse position
+          tooltip.style.top = event.clientY + 'px';
+          tooltip.textContent = 'This is the car'; // Set the tooltip content
+      } else {
+          tooltip.style.display = 'none'; // Hide the tooltip
+      }
+  }, false);
+
+  window.addEventListener('click', (event) => {
+    // Normalize mouse position to -1 to 1 range
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    // Update the picking ray with the camera and mouse position
+    raycaster.setFromCamera(mouse, camera);
+
+    // Calculate objects intersecting the picking ray
+    const intersects = raycaster.intersectObjects([body, frontWheel1, frontWheel2]);
+
+    if (intersects.length > 0) {
+        // The mouse clicked on the car
+        console.log('Clicked on the car');
+    }
+}, false);
 
   const animate = function () {
     requestAnimationFrame(animate);
@@ -90,6 +163,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // update controls
     controls.update();
+
+      // Update the picking ray with the camera and mouse position
+    raycaster.setFromCamera(mouse, camera);
+
+    // Calculate objects intersecting the picking ray
+    const intersects = raycaster.intersectObjects([body, frontWheel1, frontWheel2, rearWheel1, rearWheel2]);
+
+    if (intersects.length > 0) {
+      // The mouse is hovering over the car
+      console.log('Hovering over the car');
+    }
   };
   animate();
 
