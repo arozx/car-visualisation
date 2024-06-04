@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Create a scene
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
     75,
@@ -13,11 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
     1000
   );
 
+  // Create a WebGLRenderer instance
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0xffffff, 1);
   document.body.appendChild(renderer.domElement);
 
+  // Create a CSS2DRenderer instance
   const labelRenderer = new CSS2DRenderer();
   labelRenderer.setSize(window.innerWidth, window.innerHeight);
   labelRenderer.domElement.style.position = 'absolute';
@@ -29,14 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
   gridHelper.visible = true;
   scene.add(gridHelper);
 
-
-
   const controls = new OrbitControls(camera, renderer.domElement);
-
-
-
-
-
+  controls.enableDamping = true;
 
   // Use existing coordinate tag
   const coordTag = document.getElementById('coordinate-tag') as HTMLElement;
@@ -60,13 +57,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const rearWheel1 = new THREE.Mesh(wheelGeometry, wheelMaterial);
   const rearWheel2 = new THREE.Mesh(wheelGeometry, wheelMaterial);
 
-  // Position the front wheels
-  frontWheel1.position.set(-0.8, -0.5, 0.3);
-  frontWheel2.position.set(0.8, -0.5, 0.3);
+  // Position and rotate the front wheels
+  frontWheel1.position.set(-0.8, -0.5, 0.8);
+  frontWheel2.position.set(0.8, -0.5, 0.8);
 
-  // Position the rear wheels
-  rearWheel1.position.set(-0.8, -0.5, -0.3); 
-  rearWheel2.position.set(0.8, -0.5, -0.3);  
+  frontWheel1.rotation.z = Math.PI / 2;
+  frontWheel2.rotation.z = Math.PI / 2;
+
+  // Position and rotate the rear wheels
+  rearWheel1.position.set(-0.8, -0.5, -0.7); 
+  rearWheel2.position.set(0.8, -0.5, -0.7);  
+
+  rearWheel1.rotation.z = Math.PI / 2;
+  rearWheel2.rotation.z = Math.PI / 2;
 
   // Set camera initial position, look at the car
   camera.position.z = 10;
@@ -77,28 +80,26 @@ document.addEventListener("DOMContentLoaded", () => {
 // Import car model
   const loader = new GLTFLoader();
 
+  let model: THREE.Object3D | undefined;
+
+  // Load the model
   loader.load(
     '/public/warthog.glb',
     (gltf) => {
-      gltf.scene.scale.set(5, 5, 5);
-      gltf.scene.position.y = -0.5;
-      gltf.scene.rotation.y = Math.PI/2;
-      scene.add(rearWheel1, rearWheel2);
-      scene.add(gltf.scene, frontWheel1, frontWheel2);
+      model = gltf.scene;
+      model.scale.set(5, 5, 5); // make the model a normal size
+      scene.add(model);
     },
-    (xhr) => {
-      console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-    },
-    (error) => {
-      console.error('An error happened', error);
-    },
+    undefined,
+    (error) => console.error(error)
   );
 
+  // Setup lighting
   const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
   scene.add(ambientLight);
 
   const pointLight = new THREE.PointLight(0xffffff, 1, 100); // white light
-  pointLight.position.set(0, 10, 0); // position the light
+  pointLight.position.set(0, 10, 0);
   scene.add(pointLight);
 
   // Create a Raycaster instance
@@ -114,6 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
   tooltip.style.display = 'none'; // Hide it by default
   document.body.appendChild(tooltip);
 
+  // Tootip event listeners
   window.addEventListener('mousemove', (event) => {
       // Normalize mouse position to -1 to 1 range
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -123,16 +125,16 @@ document.addEventListener("DOMContentLoaded", () => {
       raycaster.setFromCamera(mouse, camera);
 
       // Calculate objects intersecting the picking ray
-      const intersects = raycaster.intersectObjects([body, frontWheel1, frontWheel2]);
+      const intersects = raycaster.intersectObjects([body]);
 
       if (intersects.length > 0) {
           // The mouse is over the car
-          tooltip.style.display = 'block'; // Show the tooltip
-          tooltip.style.left = event.clientX + 'px'; // Position it at the mouse position
+          tooltip.style.display = 'block'; // Show tooltip
+          tooltip.style.left = event.clientX + 'px'; // Position at the mouse position
           tooltip.style.top = event.clientY + 'px';
           tooltip.textContent = 'This is the car'; // Set the tooltip content
       } else {
-          tooltip.style.display = 'none'; // Hide the tooltip
+          tooltip.style.display = 'none'; // Hide tooltip
       }
   }, false);
 
@@ -153,6 +155,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 }, false);
 
+  // Function to get the car's position & move the car
+  let previousPosition = { x: 0, y: 0, z: 0 };
+
+  function getCarPosition() {
+    fetch('/get_position', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (model) {
+        model.position.set(data.x, data.y, data.z);
+      }
+      if (data.x !== previousPosition.x || data.y !== previousPosition.y || data.z !== previousPosition.z) {
+        body.position.set(data.x, data.y, data.z);
+        previousPosition = { x: data.x, y: data.y, z: data.z };
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
+  // Main loop
   const animate = function () {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
@@ -164,16 +192,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // update controls
     controls.update();
 
-      // Update the picking ray with the camera and mouse position
+    // Update the picking ray with the camera and mouse position
     raycaster.setFromCamera(mouse, camera);
 
     // Calculate objects intersecting the picking ray
     const intersects = raycaster.intersectObjects([body, frontWheel1, frontWheel2, rearWheel1, rearWheel2]);
 
+    // Check if the mouse is hovering over the car
     if (intersects.length > 0) {
-      // The mouse is hovering over the car
       console.log('Hovering over the car');
     }
+    getCarPosition();
   };
   animate();
 
