@@ -26,7 +26,10 @@ def favicon():
 # API endpoint to move the object
 @app.route("/move_object", methods=["POST"])
 def move_object():
+    # validate data
     data = request.json
+    if not data or "x" not in data or "y" not in data or "z" not in data:
+        return jsonify({"error": "No data provided / Invalid data"}), 400
     position.x = data.get("x", position.x)
     position.y = data.get("y", position.y)
     position.z = data.get("z", position.z)
