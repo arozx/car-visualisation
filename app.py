@@ -1,8 +1,20 @@
+from dataclasses import dataclass
+
 from flask import Flask, jsonify, request, send_from_directory
 from flask_socketio import SocketIO
 
 app = Flask(__name__, static_folder="frontend/public")
 socketio = SocketIO(app)
+
+
+@dataclass
+class Position:
+    x: float = 0.0
+    y: float = 0.0
+    z: float = 0.0
+
+
+position = Position()
 
 
 # Ignore favicon request
@@ -11,24 +23,20 @@ def favicon():
     return ""
 
 
-object_position = {"x": 0, "y": 0, "z": 0}
-
-
 # API endpoint to move the object
 @app.route("/move_object", methods=["POST"])
 def move_object():
-    global object_position
     data = request.json
-    object_position["x"] = data.get("x", object_position["x"])
-    object_position["y"] = data.get("y", object_position["y"])
-    object_position["z"] = data.get("z", object_position["z"])
-    socketio.emit("position_changed", object_position, namespace="/")
-    return jsonify(object_position)
+    position.x = data.get("x", position.x)
+    position.y = data.get("y", position.y)
+    position.z = data.get("z", position.z)
+    socketio.emit("position_changed", position.__dict__, namespace="/")
+    return jsonify(position.__dict__)
 
 
 @app.route("/get_position", methods=["GET"])
 def get_position():
-    return jsonify(object_position)
+    return jsonify(position.__dict__)
 
 
 # Serve the index.html file from the frontend public directory
