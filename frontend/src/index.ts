@@ -315,11 +315,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Handle change in window size
+  let resizeTimeout: ReturnType<typeof setTimeout>;
   window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    }, 200);
   });
 
   // Coordinates button event listener
