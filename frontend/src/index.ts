@@ -151,6 +151,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const dummy = new THREE.Object3D();
   const grassBlades = new THREE.InstancedMesh(grassBladeGeometry, grassBladeMaterial, count);
 
+  // Populate the grassBlades mesh with instances
+  for (let i = 0; i < count; i++) {
+    const x = Math.random() * 100 - 50;
+    const z = Math.random() * 100 - 50;
+    const yRotation = Math.random() * Math.PI * 2;
+
+    dummy.position.set(x, 0, z);
+    dummy.rotation.y = yRotation;
+
+    const randomScale = Math.random() * 0.75 + 0.25;
+    dummy.scale.set(1, randomScale, 1);
+    dummy.updateMatrix();
+
+    grassBlades.setMatrixAt(i, dummy.matrix);
+  }
+  scene.add(grassBlades);
+
+
   const instanceMatrices = [];
   for (let i = 0; i < count; i++) {
     const x = Math.random() * 100 - 50;
@@ -179,19 +197,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     return dummy.matrix.clone();
   }
-
-  scene.add(grassBlades);
-
-  // Populate the grass field
-  for (let i = 0; i < count; i++) {
-    const x = Math.random() * 100 - 50;
-    const z = Math.random() * 100 - 50;
-    const yRotation = Math.random() * Math.PI * 2;
-
-    const bladeMatrix = createGrassBlade(x, z, yRotation);
-    grassBlades.setMatrixAt(i, bladeMatrix);
-  }
-  scene.add(grassBlades);
 
   // Add a ambient light
   const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
