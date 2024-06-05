@@ -3,7 +3,6 @@ import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { TGALoader } from 'three/examples/jsm/loaders/TGALoader.js';
-import { CubeTexture } from 'three/src/textures/CubeTexture.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   // Create a scene
