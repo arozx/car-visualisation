@@ -281,7 +281,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Main loop
+  let lastPositionUpdate = Date.now();
+  const positionUpdateInterval = 100; // in milliseconds
+
   const animate = function () {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
@@ -290,7 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update coordinates display
     coordTag.textContent = `Coordinates: (${body.position.x.toFixed(2)}, ${body.position.y.toFixed(2)}, ${body.position.z.toFixed(2)})`;
 
-    // update controls
     controls.update();
 
     // Update the picking ray with the camera and mouse position
@@ -303,9 +304,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (intersects.length > 0) {
       console.log('Hovering over the car');
     }
-    getCarPosition();
+
+    const now = Date.now();
+    if (now - lastPositionUpdate > positionUpdateInterval) {
+      getCarPosition();
+      lastPositionUpdate = now;
+    }
   };
   animate();
+
 
   // Handle change in window size
   window.addEventListener('resize', () => {
