@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const bodyGeometry = new THREE.BoxGeometry(1, 0.5, 2);
   const bodyMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
   const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-  
+
   const wheelGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.2, 32);
   const wheelMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
@@ -65,8 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
   frontWheel2.rotation.z = Math.PI / 2;
 
   // Position and rotate the rear wheels
-  rearWheel1.position.set(-0.8, -0.5, -0.7); 
-  rearWheel2.position.set(0.8, -0.5, -0.7);  
+  rearWheel1.position.set(-0.8, -0.5, -0.7);
+  rearWheel2.position.set(0.8, -0.5, -0.7);
 
   rearWheel1.rotation.z = Math.PI / 2;
   rearWheel2.rotation.z = Math.PI / 2;
@@ -368,6 +368,13 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebar.classList.add('expanded');
       mainContent.style.marginLeft = '240px';
     }
+  });
+
+  // Toggle grass button event listener
+  const toggleGrassButton = document.getElementById('toggle-grass-button') as HTMLElement;
+  toggleGrassButton.addEventListener('click', () => {
+      grassBlades.visible = !grassBlades.visible;
+      localStorage.setItem('grassVisible', grassBlades.visible.toString());
   });
 
   // Camera zoom and rotation
