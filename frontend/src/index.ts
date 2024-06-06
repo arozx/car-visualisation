@@ -3,7 +3,6 @@ import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { TGALoader } from 'three/examples/jsm/loaders/TGALoader.js';
-import io from 'socket.io-client';
 
 document.addEventListener("DOMContentLoaded", () => {
   // Create a scene
@@ -258,19 +257,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const fetchInterval = 3; // in milliseconds
   let previousPosition = { x: 0, y: 0, z: 0 };
 
-  const socket = io();
-
-  // Function to get the car's position & move the car
-  socket.on('positionUpdate', (data) => {
-    if (model) {
-      model.position.set(data.x, data.y, data.z);
-    }
-    if (data.x !== previousPosition.x || data.y !== previousPosition.y || data.z !== previousPosition.z) {
-      body.position.set(data.x, data.y, data.z);
-      previousPosition = { x: data.x, y: data.y, z: data.z };
-    }
-  });
-
   function getCarPosition() {
     const now = Date.now();
     if (now - lastFetchTime < fetchInterval) {
@@ -278,7 +264,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     lastFetchTime = now;
 
-    socket.emit('getPosition');
+    fetch('/get_position', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (model) {
+        model.position.set(data.x, data.y, data.z);
+      }
+      if (data.x !== previousPosition.x || data.y !== previousPosition.y || data.z !== previousPosition.z) {
+        body.position.set(data.x, data.y, data.z);
+        previousPosition = { x: data.x, y: data.y, z: data.z };
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   }
 
   let lastPositionUpdate = Date.now();

@@ -39,7 +39,6 @@ def move_object():
 
 @app.route("/get_position", methods=["GET"])
 def get_position():
-    socketio.emit("position_requested", namespace="/")
     return jsonify(position.__dict__)
 
 
