@@ -176,7 +176,7 @@ Use the [Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_A
 | 🔲 | Speed / acceleration graph overlay |
 | 🔲 | Multiple simultaneous vehicles |
 | 🔲 | Mobile gamepad API support |
-| 🔲 | Docker-based one-command demo |
+| ✅ | Docker-based one-command demo |
 
 ---
 

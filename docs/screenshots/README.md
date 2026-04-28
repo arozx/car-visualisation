@@ -14,5 +14,5 @@ This folder contains screenshots and screen recordings used in the README and pr
 ## Recording tips
 
 - Use [LICEcap](https://www.cockos.com/licecap/) (Windows/macOS) or [Peek](https://github.com/phw/peek) (Linux) to capture GIFs.
-- Keep GIFs under 5 MB; aim for 480 p at 15 fps.
+- Keep GIFs under 5 MB; aim for 480p at 15 fps.
 - For `social-preview.png` use a dark scene angle so the vehicle and skybox are both visible.

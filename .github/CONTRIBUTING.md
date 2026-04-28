@@ -20,8 +20,7 @@ These are well-scoped improvements that don't require deep knowledge of the code
 | 3 | **Path recording** — log `{x, y, z, timestamp}` on the server and expose `/playback` to replay a recorded path | `app.py` |
 | 4 | **Speed indicator** — compute distance between position updates and display a speed value in the HUD | `frontend/src/index.ts` |
 | 5 | **Mobile gamepad API** — read controller axes in the browser via the [Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API) instead of the Python script | `frontend/src/index.ts` |
-| 6 | **Docker one-command demo** — create a `Dockerfile` for the Flask server and a `docker-compose.yml` | new files |
-| 7 | **Unit tests** — add `pytest` tests for the Flask endpoints (`/move_object`, `/get_position`) | new `tests/` folder |
+| 6 | **Unit tests** — add `pytest` tests for the Flask endpoints (`/move_object`, `/get_position`) | new `tests/` folder |
 
 ## Code Style
 
